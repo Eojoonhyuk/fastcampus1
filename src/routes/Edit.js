@@ -70,7 +70,7 @@ export default class Edit extends Component {
                     </div>
                 </div>
                 <div class="worker-detail-box-right">
-                    <img src=${imgURL}>
+                    <img id="detail-img" src=${imgURL}>
                 </div>
             </div>
         </div>
@@ -162,6 +162,17 @@ export default class Edit extends Component {
     const cancelButton = document.querySelector("#cancel-button");
     cancelButton.addEventListener("click", async () => {
       location.href = `/#/detail?name=${worker_name}&number=${this.state.number}`;
+    });
+
+    const fileDOM = document.querySelector("#select-img");
+    const preview = document.querySelector("#detail-img");
+
+    fileDOM.addEventListener("change", () => {
+      const reader = new FileReader();
+      reader.onload = ({ target }) => {
+        preview.src = target.result;
+      };
+      reader.readAsDataURL(fileDOM.files[0]);
     });
   }
 }

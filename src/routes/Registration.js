@@ -4,6 +4,7 @@ import { storage, db } from "../../firebase";
 import Header from "../components/common/Header";
 import { Component } from "../core/core";
 import logoImage from "../asset/images/logo.jpg";
+import defaltImage from "../asset/images/default.jpg";
 export default class Registration extends Component {
   constructor() {
     super();
@@ -58,6 +59,9 @@ export default class Registration extends Component {
                     <p>첨부된 프로필 사진이 없을 시, 기본 이미지 또는 변경 전 이미지로 첨부됩니다.</p>
                   </div>
               </div>
+            </div>
+            <div class="worker-detail-box-right">
+              <img id="detail-img" src=${defaltImage}>
             </div>
           </div>
       </div>
@@ -146,6 +150,19 @@ export default class Registration extends Component {
         const imgURL = await uploadImage(imageRef);
         await uploadDataAndRedirect(imgURL);
       }
+    };
+
+    window.onload = function () {
+      const fileDOM = document.querySelector("#workerImg");
+      const preview = document.querySelector("#detail-img");
+
+      fileDOM.addEventListener("change", () => {
+        const reader = new FileReader();
+        reader.onload = ({ target }) => {
+          preview.src = target.result;
+        };
+        reader.readAsDataURL(fileDOM.files[0]);
+      });
     };
   }
 }

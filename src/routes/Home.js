@@ -86,32 +86,35 @@ export default class Home extends Component {
 
     async function searchWorker() {
       const searchKeyword = inputEl.value.trim();
-      if (searchKeyword === "") return;
-
       const workerItemsContainer = document.querySelector(".worker-items");
-      workerItemsContainer.innerHTML = "";
+      if (searchKeyword === "") {
+        workerItemsContainer.innerHTML = "";
+        fetchWorkersData();
+      } else {
+        workerItemsContainer.innerHTML = "";
 
-      const q = query(
-        collection(db, "board"),
-        where("name", "==", searchKeyword)
-      );
-      const querySnapshot = await getDocs(q);
+        const q = query(
+          collection(db, "board"),
+          where("name", "==", searchKeyword)
+        );
+        const querySnapshot = await getDocs(q);
 
-      const searchedWorkers = [];
-      querySnapshot.forEach((doc) => {
-        searchedWorkers.push(doc.data());
-      });
+        const searchedWorkers = [];
+        querySnapshot.forEach((doc) => {
+          searchedWorkers.push(doc.data());
+        });
 
-      workerItemsContainer.append(
-        ...searchedWorkers.map(
-          (worker) =>
-            new Worker({
-              props: {
-                ...worker,
-              },
-            }).el
-        )
-      );
+        workerItemsContainer.append(
+          ...searchedWorkers.map(
+            (worker) =>
+              new Worker({
+                props: {
+                  ...worker,
+                },
+              }).el
+          )
+        );
+      }
     }
   }
 }
